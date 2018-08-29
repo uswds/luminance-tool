@@ -10,6 +10,7 @@ const getInitialValues = (hex = '#cc0f1d') => {
   const [ hue, saturation, lightness ] = initialColor.hsl();
 
   return {
+    adjustedHexColor: initialColor.hex(),
     hexColor: initialColor.hex(),
     hexValue: hex,
     hValue: hue,
@@ -61,15 +62,6 @@ class App extends Component {
     let newColor;
     let nextState;
 
-    /**
-     * get new hex value
-     * is valid hex?
-     *  if yes
-     *    update hexvalue, hexColor
-     *  if no
-     *    update hexValue
-     */
-
     try {
       newColor = chroma(value);
       nextState = {
@@ -106,6 +98,7 @@ class App extends Component {
       <div className="grid-container">
         <div className="grid-row grid-gap">
           <div className="desktop:grid-col-4">
+            <h3>Original Color</h3>
             <ColorBlock color={this.state.hexColor} />
             <HexInput
               className="desktop:grid-col-8 usa-input"
@@ -118,6 +111,7 @@ class App extends Component {
             />
           </div>
           <div className="desktop:grid-col-4">
+            <h3>Final Color</h3>
             <ColorBlock color={this.hsl2CSS()} />
             <div>
               <NumberInput
@@ -156,10 +150,18 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <div className="grid-row margin-top-4">
-          <div className="radius-lg padding-x-2 padding-bottom-2 margin-y-1 border">
-            <p>Relative Luminance</p>
-            <b>{ this.calculateLuminance() }</b>
+        <div className="grid-row grid-gap margin-top-4">
+          <div className="grid-col-3">
+            <div className="radius-lg padding-x-2 padding-bottom-2 margin-y-1 border">
+              <p>Relative Luminance</p>
+              <b>{ this.calculateLuminance() }</b>
+            </div>
+          </div>
+          <div className="grid-col-3">
+            <div className="radius-lg padding-x-2 padding-bottom-2 margin-y-1 border">
+              <p>Final Hex Value</p>
+              <b>{ this.hsl().hex() }</b>
+            </div>
           </div>
         </div>
         <button
