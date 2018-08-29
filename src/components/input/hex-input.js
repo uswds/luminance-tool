@@ -30,7 +30,7 @@ const HexInput = (Component) => {
     }
     
     sanitize(value) {
-      return value.slice(0, 6).replace(/[^0-9A-F]+/ig, '');
+      return value.slice(0, 7).replace(/[^0-9A-F]+/ig, '');
     }
 
     validate(value) {
