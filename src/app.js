@@ -92,7 +92,7 @@ class App extends Component {
   }
 
   reset() {
-    this.setState(getInitialValues);
+    this.setState(getInitialValues());
   }
 
   calculateLuminance() {

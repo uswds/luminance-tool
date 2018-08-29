@@ -29,14 +29,12 @@ const NumberInput = (Component) => {
 
     render() {
       return (
-        <div className="grid-row grid-gap">
+        <div className="grid-row grid-gap margin-y-1">
           <Component
             { ...this.props }
-            type='range'
+            type='number'
             handleChange={this.onChange}
-          >
-            {this.props.value}
-          </Component>
+          />
         </div>
       )
     }
