@@ -7,12 +7,6 @@ const NumberInput = (Component) => {
   return class extends React.Component {
     constructor() {
       super();
-
-      this.state = {
-        dirty: false,
-        pristine: true,
-        valid: false,
-      };
       
       this.onChange = this.onChange.bind(this);
     }
@@ -21,8 +15,9 @@ const NumberInput = (Component) => {
       return NUM_REGEXP.test(value);
     }
 
-    onChange(name, value) {
-      const { handleChange } = this.props;
+    onChange(event) {
+      const { handleChange, name } = this.props;
+      const { value } = event.target;
 
       handleChange(name, Number(value))
     }

@@ -68,7 +68,6 @@ class App extends Component {
       };
 
       if (target === 'adjustedColor') {
-        debugger
         nextState = {
           ...nextState,
           finalColor: {
