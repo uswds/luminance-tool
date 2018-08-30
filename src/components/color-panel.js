@@ -13,9 +13,11 @@ class ColorPanel extends React.Component {
     const { heading, hexColor, children } = this.props;
 
     return (
-      <div className="desktop:grid-col-4">
-        <h3>{heading}</h3>
-        <ColorBlock color={hexColor} />
+      <div className="desktop:grid-col-4 display-flex flex-column flex-justify">
+        <div>
+          <h3>{heading}</h3>
+          <ColorBlock color={hexColor} />
+        </div>
         { children }
       </div>
     );

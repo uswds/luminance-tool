@@ -36,7 +36,7 @@ class HSLForm extends React.Component {
     const { h, s, l } = props.hslParams;
 
     return (
-      <div className="grid-row margin-top-4">
+      <div className="grid-row margin-top-2">
         <NumberInput
           className="desktop:grid-col-5"
           labelText="hue:"

@@ -26,9 +26,9 @@ const ColorOutput = ({ luminance, hexValue, color }) => {
       <OutputBox key="hex" name="hex" value={color.hex()} />
     );
   }
-  
+
   return (
-    <div className="grid-row grid-gap margin-top-4">
+    <div className="grid-row grid-gap margin-top-2">
       {outputs}
     </div>
   );

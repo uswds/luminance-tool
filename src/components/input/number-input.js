@@ -7,7 +7,7 @@ const NumberInput = (Component) => {
   return class extends React.Component {
     constructor() {
       super();
-      
+
       this.onChange = this.onChange.bind(this);
     }
 
@@ -24,7 +24,7 @@ const NumberInput = (Component) => {
 
     render() {
       return (
-        <div className="grid-row grid-gap grid-col-12 margin-y-1">
+        <div className="grid-row grid-gap grid-col-12 margin-y-05">
           <Component
             { ...this.props }
             type='number'
