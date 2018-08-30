@@ -9,23 +9,14 @@ const HexInput = (Component) => {
       super();
 
       this.onChange = this.onChange.bind(this);
-      this.checkHexLength = this.checkHexLength.bind(this);
     }
 
-    checkHexLength(event) {
+    onChange(event) {
       const { value } = event.target;
-      const sanitized = this.sanitize(value);
+      const sanitizedValue = this.sanitize(value);
 
-      if (sanitized.length % 3 === 0) {
-        this.props.handleBlur(sanitized);
-      }
-    }
-
-    onChange(name, value) {
-      const truncatedValue = this.sanitize(value);
-
-      if (this.validate(truncatedValue)) {
-        this.props.handleChange(`#${truncatedValue}`);
+      if (this.validate(sanitizedValue)) {
+        this.props.handleChange(`#${sanitizedValue}`);
       }
     }
     
@@ -42,9 +33,8 @@ const HexInput = (Component) => {
         <Component
           { ...this.props }
           handleChange={this.onChange}
-          handleBlur={this.checkHexLength}
         />
-      )
+      );
     }
   }
 };
