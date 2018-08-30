@@ -46,14 +46,14 @@ class App extends Component {
 
   updateHSL(hex) {
     const [ hue, saturation, lightness ] = chroma(hex).hsl();
-    
+
     return {
       h: hue,
       s: saturation,
       l: lightness,
     };
   }
-  
+
   onHexChange(target, value) {
     let newColor;
     let nextState;
@@ -126,7 +126,7 @@ class App extends Component {
           />
         </div>
         <button
-          className="usa-button"
+          className="usa-button margin-top-6"
           type="button"
           onClick={this.reset}
         >
