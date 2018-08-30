@@ -1,22 +1,28 @@
 import React, { Component } from 'react';
 import chroma from 'chroma-js';
 import '../node_modules/uswds/dist/css/uswds.css';
-import HexInput from './components/input/hex-input';
-import NumberInput from './components/input/number-input';
-import ColorBlock from './components/color-block';
+import HSLColorPanel from './components/hsl-color-panel';
+import HexColorPanel from './components/hex-color-panel';
 
-const getInitialValues = (hex = '#cc0f1d') => {
-  const initialColor = chroma(hex);
+const getInitialValues = (adjusted = '#cc0f1d') => {
+  const initialColor = chroma(adjusted);
   const [ hue, saturation, lightness ] = initialColor.hsl();
 
   return {
-    adjustedHexColor: initialColor.hex(),
-    hexColor: initialColor.hex(),
-    hexValue: hex,
-    hValue: hue,
-    sValue: saturation,
-    lValue: lightness,
-    lumValue: null,
+    adjustedColor: {
+      hexColor: adjusted,
+      hexValue: adjusted
+    },
+    originalColor: {
+      hexColor: '#f1f1f1',
+      hexValue: '#f1f1f1',
+    },
+    finalColor: {
+      h: hue,
+      s: saturation,
+      l: lightness,
+      lum: null,
+    },
   };
 };
 
@@ -26,39 +32,29 @@ class App extends Component {
 
     this.state = getInitialValues();
 
-    this.onInputChange = this.onInputChange.bind(this);
+    this.onUpdateFinalColor = this.onUpdateFinalColor.bind(this);
     this.onHexChange = this.onHexChange.bind(this);
     this.updateHSL = this.updateHSL.bind(this);
     this.reset = this.reset.bind(this);
   }
 
   hsl() {
-    const { hValue, sValue, lValue } = this.state;
+    const { h, s, l } = this.state.finalColor;
 
-    return chroma(hValue, sValue, lValue, 'hsl');
-  }
-
-  hsl2CSS() {
-    return this.hsl().css('hsla');
-  }
-
-  hex2CSS() {
-    chroma(this.state.hexValue).css();
+    return chroma(h, s, l, 'hsl');
   }
 
   updateHSL(hex) {
     const [ hue, saturation, lightness ] = chroma(hex).hsl();
     
-    const nextState = {
-      hValue: hue,
-      sValue: saturation,
-      lValue: lightness,
+    return {
+      h: hue,
+      s: saturation,
+      l: lightness,
     };
-
-    this.setState(nextState);
   }
-
-  onHexChange(value) {
+  
+  onHexChange(target, value) {
     let newColor;
     let nextState;
 
@@ -68,27 +64,36 @@ class App extends Component {
         hexColor: newColor.hex(),
         hexValue: value,
       };
+
+      if (target === 'adjustedColor') {
+        nextState = {
+          [target]: nextState,
+          finalColor: {
+            ...this.state.finalColor,
+            ...this.updateHSL(newColor.hex()),
+          },
+        };
+      }
     } catch(e) {
       nextState = {
-        hexValue: value,
-      };
+        [target]: {
+          ...this.state[target],
+          hexValue: value,
+        },
+      }
     }
 
     this.setState(nextState);
-  }
-
-  onInputChange(name, value) {
-    this.setState({
-      [name]: value
-    });
   }
 
   reset() {
     this.setState(getInitialValues());
   }
 
-  calculateLuminance() {
-    return (chroma(this.hsl()).luminance() * 100).toFixed(4);
+  onUpdateFinalColor(name, value) {
+    this.setState({
+      finalColor: { ...this.state.finalColor, [name]: value },
+    });
   }
 
   render() {
@@ -97,72 +102,26 @@ class App extends Component {
     return (
       <div className="grid-container">
         <div className="grid-row grid-gap">
-          <div className="desktop:grid-col-4">
-            <h3>Original Color</h3>
-            <ColorBlock color={this.state.hexColor} />
-            <HexInput
-              className="desktop:grid-col-8 usa-input"
-              labelText="hex value:"
-              labelClassName="desktop:grid-col-4"
-              name="hexValue"
-              handleBlur={this.updateHSL}
-              handleChange={this.onHexChange}
-              value={state.hexValue}
-            />
-          </div>
-          <div className="desktop:grid-col-4">
-            <h3>Final Color</h3>
-            <ColorBlock color={this.hsl2CSS()} />
-            <div>
-              <NumberInput
-                className="desktop:grid-col-5"
-                labelText="hue:"
-                labelClassName="desktop:grid-col-4"
-                max="360"
-                min="0"
-                name="hValue"
-                step="0.01"
-                handleChange={this.onInputChange}
-                value={state.hValue}
-              />
-              <NumberInput
-                className="desktop:grid-col-5"
-                labelText="saturation:"
-                labelClassName="desktop:grid-col-4"
-                max="1"
-                min="0"
-                name="sValue"
-                step="0.01"
-                handleChange={this.onInputChange}
-                value={state.sValue}
-              />
-              <NumberInput
-                className="desktop:grid-col-5"
-                labelText="lightness:"
-                labelClassName="desktop:grid-col-4"
-                max="1"
-                min="0"
-                name="lValue"
-                step="0.01"
-                handleChange={this.onInputChange}
-                value={state.lValue}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="grid-row grid-gap margin-top-4">
-          <div className="grid-col-3">
-            <div className="radius-lg padding-x-2 padding-bottom-2 margin-y-1 border">
-              <p>Relative Luminance</p>
-              <b>{ this.calculateLuminance() }</b>
-            </div>
-          </div>
-          <div className="grid-col-3">
-            <div className="radius-lg padding-x-2 padding-bottom-2 margin-y-1 border">
-              <p>Final Hex Value</p>
-              <b>{ this.hsl().hex() }</b>
-            </div>
-          </div>
+          <HexColorPanel
+            target="originalColor"
+            heading="original color"
+            color={chroma(state.originalColor.hexColor)}
+            hexValue={state.originalColor.hexValue}
+            handleUpdate={this.onHexChange}
+          />
+          <HSLColorPanel
+            heading="final color"
+            color={this.hsl()}
+            hslParams={this.state.finalColor}
+            handleUpdate={this.onUpdateFinalColor}
+          />
+          <HexColorPanel
+            target="adjustedColor"
+            heading="adjusted color"
+            color={chroma(state.adjustedColor.hexColor)}
+            hexValue={state.adjustedColor.hexValue}
+            handleUpdate={this.onHexChange}
+          />
         </div>
         <button
           className="usa-button"

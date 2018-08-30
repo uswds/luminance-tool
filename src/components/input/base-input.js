@@ -8,7 +8,6 @@ const propTypes = {
   labelText: PropTypes.string,
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
-  validator: PropTypes.func,
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
@@ -16,27 +15,13 @@ const propTypes = {
 };
 
 class BaseInput extends React.Component {
-  constructor() {
-    super();
-
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange(event) {
-    const { value } = event.target;
-
-    this.props.handleChange(this.props.name, value);
-  }
-
   render() {
     const {
-      className,
       name,
       labelText,
-      type,
-      value,
       children,
       labelClassName,
+      handleChange,
       ...rest
     } = this.props;
 
@@ -47,16 +32,9 @@ class BaseInput extends React.Component {
         </label>
         <input
           {...rest}
-          className={`${className}`}
-          type={type}
           name={name}
-          value={value}
-          onChange={this.onChange}
-          onBlur={this.props.handleBlur}
+          onChange={handleChange}
         />
-        <span className="desktop:grid-col-1">
-          { children }
-        </span>
       </React.Fragment>
     )
   }
@@ -68,7 +46,6 @@ BaseInput.defaultProps = {
   className: '',
   labelText: 'form element',
   type: 'text',
-  handleBlur: () => ({}),
-}
+};
 
 export default BaseInput;
