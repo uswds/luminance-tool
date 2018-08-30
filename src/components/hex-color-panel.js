@@ -26,7 +26,7 @@ class HexColorPanel extends React.Component {
   }
 
   render() {
-    const { color, hexValue, heading, handleUpdate, hslParams } = this.props;
+    const { color, hexValue, heading, handleUpdate, target } = this.props;
 
     return (
       <ColorPanel heading={heading} hexColor={color.hex()}>
@@ -35,7 +35,7 @@ class HexColorPanel extends React.Component {
             className="desktop:grid-col-8 usa-input"
             labelText="hex value:"
             labelClassName="desktop:grid-col-4"
-            name="originalHex"
+            name={target}
             value={hexValue}
             handleChange={this.onUpdate} />
         </div>

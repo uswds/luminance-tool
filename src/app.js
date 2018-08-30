@@ -61,8 +61,10 @@ class App extends Component {
     try {
       newColor = chroma(value);
       nextState = {
-        hexColor: newColor.hex(),
-        hexValue: value,
+        [target]: {
+          hexColor: newColor.hex(),
+          hexValue: value,
+        },
       };
 
       if (target === 'adjustedColor') {
