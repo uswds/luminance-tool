@@ -68,8 +68,9 @@ class App extends Component {
       };
 
       if (target === 'adjustedColor') {
+        debugger
         nextState = {
-          [target]: nextState,
+          ...nextState,
           finalColor: {
             ...this.state.finalColor,
             ...this.updateHSL(newColor.hex()),
