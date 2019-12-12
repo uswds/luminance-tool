@@ -6,4 +6,4 @@ Bare-bones browser luminance checker
 
 * `npm install`
 * `yarn start` or `npm start` if `yarn` isn't installed
-* Visit `localhost:3000` in your browser of choice (preferable Chrome)
+* Visit `localhost:3000` in your browser of choice
